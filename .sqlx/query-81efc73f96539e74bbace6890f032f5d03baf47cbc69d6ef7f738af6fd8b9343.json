@@ -1,0 +1,101 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            UPDATE hub_llmgateway_oauth_clients\n            SET api_key_hash = $1, expires_at = NOW() + make_interval(hours => token_expiration_hours), updated_at = NOW()\n            WHERE id = $2\n            RETURNING id, application_service, application_id, api_key_hash, api_secret_hash, rate_limit_per_minute,\n                      allowed_models, metadata, is_active, token_expiration_hours, expires_at, created_at, updated_at, last_used_at\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "application_service",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "application_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 3,
+        "name": "api_key_hash",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "api_secret_hash",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "rate_limit_per_minute",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "allowed_models",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 7,
+        "name": "metadata",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 8,
+        "name": "is_active",
+        "type_info": "Bool"
+      },
+      {
+        "ordinal": 9,
+        "name": "token_expiration_hours",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 10,
+        "name": "expires_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 11,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 12,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 13,
+        "name": "last_used_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "81efc73f96539e74bbace6890f032f5d03baf47cbc69d6ef7f738af6fd8b9343"
+}

@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: hid-oauth-postgres
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - hid-oauth-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hid_oauth -d hid_oauth"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hid-oauth-network
+
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile.db.migrations
+    container_name: hid-oauth-migrations
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    networks:
+      - hid-oauth-network
+
+  sqlx-prepare:
+    image: rust:1.88-trixie
+    container_name: hid-oauth-sqlx-prepare
+    working_dir: /app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    volumes:
+      - .:/app
+    command: >
+      bash -c "cargo install sqlx-cli --version 0.8.6 --no-default-features --features postgres,native-tls --locked &&
+               cargo sqlx prepare"
+    networks:
+      - hid-oauth-network
+
+volumes:
+  hid-oauth-postgres-data:
+
+networks:
+  hid-oauth-network:
+    driver: bridge

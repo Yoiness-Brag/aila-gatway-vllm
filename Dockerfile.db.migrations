@@ -1,0 +1,7 @@
+FROM rust:1.88-trixie AS builder
+RUN cargo install sqlx-cli --version 0.8.6 --no-default-features --features postgres,native-tls --locked
+FROM gcr.io/distroless/cc-debian13:debug-nonroot AS runtime
+COPY --from=builder /usr/local/cargo/bin/sqlx /usr/local/bin/sqlx
+COPY migrations /migrations
+WORKDIR /
+ENTRYPOINT ["sqlx", "migrate", "run"]

@@ -1,0 +1,127 @@
+general:
+  trace_content_enabled: true # Optional, defaults to true, set to false to disable tracing of request and response content
+providers:
+  # Azure OpenAI configuration
+  - key: azure-openai
+    type: azure
+    api_key: "<your-azure-api-key>"
+    resource_name: "<your-resource-name>"
+    api_version: "<your-api-version>"
+
+  # OpenAI configuration
+  - key: openai
+    type: openai
+    api_key: "<your-openai-api-key>"
+    # or use environment variable
+    # api_key: ${OPENAI_API_KEY}
+    base_url: "optional base url. If not provided, defaults to https://api.openai.com/v1"
+
+  # Anthropic configuration
+  - key: anthropic
+    type: anthropic
+    api_key: "<your-anthropic-api-key>"
+
+  - key: bedrock
+    type: bedrock
+    api_key: ""# Not used for AWS Bedrock
+    region: "<your-aws-region>" # like "us-east-1"
+    inference_profile_id: "<your-inference-profile-id>" # like "us"
+    # Authentication options - choose one:
+    # Option 1: Use IAM roles (recommended for production)
+    use_iam_role: true  # Use IAM roles for service accounts (IRSA) or instance profiles
+    # Option 2: Use explicit credentials (for development/testing)
+    # use_iam_role: "false"  # or omit this line
+    # AWS_ACCESS_KEY_ID: "<your-aws-access-key>"
+    # AWS_SECRET_ACCESS_KEY: "<your-aws-secret-key>"
+    # AWS_SESSION_TOKEN: "<your-session-token>"  # Optional
+
+  # Vertex AI configuration
+  # Uses service account authentication
+  - key: vertexai
+    type: vertexai
+    api_key: ""  # Required field but not used with service account auth
+    project_id: "<your-gcp-project-id>"
+    location: "<your-gcp-region>"  # e.g., us-central1
+    credentials_path: "/path/to/service-account.json"  # Path to your service account key file
+
+models:
+  # OpenAI Models
+  - key: gpt-4
+    type: gpt-4
+    provider: openai
+  - key: gpt-3.5-turbo
+    type: gpt-3.5-turbo
+    provider: openai
+
+  # Anthropic Models
+  - key: claude-3-5-sonnet
+    type: claude-3-5-sonnet-20241022
+    provider: anthropic
+  - key: claude-3-haiku
+    type: claude-3-haiku-20240307
+    provider: anthropic
+
+  # Azure OpenAI Models
+  - key: gpt-4-azure
+    type: gpt-4
+    provider: azure-openai
+    deployment: "<your-deployment-name>"
+  - key: gpt-35-turbo-azure
+    type: gpt-35-turbo
+    provider: azure-openai
+    deployment: "<your-deployment-name>"
+
+  # Bedrock Models
+  - key: bedrock-model
+    # some models are region specific, it is a good idea to get ARN from cross region reference tab
+    type: "< model-id or Inference profile ARN or Inference profile ID>"
+    provider: bedrock
+    model_provider: "anthropic" # can be: ai21, titan, anthropic
+    model_version: "v2:0" # optional, defaults to "v1:0"
+
+  # Vertex AI Models
+  # Chat and Completion model
+  - key: gemini-1.5-flash
+    type: gemini-1.5-flash  # Supports both chat and completion endpoints
+    provider: vertexai
+  # Embeddings model
+  - key: textembedding-gecko
+    type: textembedding-gecko  # Supports embeddings endpoint
+    provider: vertexai
+    deployment: "<your-deployment>"
+
+pipelines:
+  # Default pipeline for chat completions
+  - name: default
+    type: chat
+    plugins:
+      - logging:
+          level: info  # Supported levels: debug, info, warning, error
+      - tracing:  # Optional tracing configuration
+          endpoint: "https://api.langfuse.com/v1/traces"
+          api_key: "<your-langfuse-api-key>"
+      - model-router:
+          models:  # List the models you want to use for chat
+            - gpt-4
+            - gpt-4-azure
+            - claude-3-5-sonnet
+            - gemini-1.5-flash
+
+  # Pipeline for text completions
+  - name: completions
+    type: completion
+    plugins:
+      - model-router:
+          models:  # List the models you want to use for completions
+            - gpt-3.5-turbo
+            - gpt-35-turbo-azure
+            - claude-3-haiku
+            - gemini-1.5-flash
+
+  # Pipeline for embeddings
+  - name: embeddings
+    type: embeddings
+    plugins:
+      - model-router:
+          models:  # List the models you want to use for embeddings
+            - textembedding-gecko

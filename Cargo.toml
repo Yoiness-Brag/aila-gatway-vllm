@@ -1,0 +1,83 @@
+[package]
+name = "aila-oauth"
+version = "1.0.0"
+edition = "2026"
+description = "AILA-OAuth LLM Gateway with OAuth Authentication"
+authors = ["AILA AI Team <Youness.ElBrag@aila.ma>"]
+
+
+[dependencies]
+axum = { version = "0.8", features = ["macros"] }
+tokio = { version = "1.45.0", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+reqwest = { version = "0.12", features = ["json", "stream"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+serde_yaml = "0.9"
+tower = { version = "0.5.1", features = ["full"] }
+anyhow = "1.0.95"
+chrono = { version = "0.4.38", features = ["serde"] }
+opentelemetry = { version = "0.27", default-features = false, features = [
+    "trace",
+] }
+opentelemetry_sdk = { version = "0.27", default-features = false, features = [
+    "trace",
+    "rt-tokio",
+] }
+opentelemetry-semantic-conventions = { version = "0.27.0", features = [
+    "semconv_experimental",
+] }
+opentelemetry-otlp = { version = "0.27.0", features = [
+    "http-proto",
+    "reqwest-client",
+    "reqwest-rustls",
+] }
+axum-prometheus = "0.8.0"
+reqwest-streams = { version = "0.8.1", features = ["json"] }
+futures = "0.3.31"
+async-stream = "0.3.6"
+async-trait = "0.1.83"
+yup-oauth2 = "8.3.0"
+aws-sdk-bedrockruntime = "1.120.0"
+aws-config = "1.8.12"
+aws-credential-types = { version = "1.2.11", features = [
+    "hardcoded-credentials",
+] }
+http = "1.1.0"
+aws-smithy-runtime = { version = "1.9.8", features = ["test-util"] }
+aws-smithy-types = "1.3.6"
+aws-types = "1.3.11"
+tower-http = { version = "0.6.2", features = ["trace"] }
+base64 = "0.22"
+uuid = { version = "1.16.0", features = ["v4", "serde"] }
+
+sqlx = { version = "0.8", features = ["runtime-tokio-native-tls", "postgres", "macros", "chrono", "uuid", "json", "migrate"] }
+
+getrandom = "0.2"
+dotenvy = "0.15"
+
+utoipa = { version = "5.0.0", features = ["axum_extras", "chrono", "uuid", "openapi_extensions"] }
+utoipa-swagger-ui = { version = "9", features = ["axum", "vendored"] }
+utoipa-scalar = { version = "0.3.0", features = ["axum"] }
+log = "0.4"
+
+[[bin]]
+name = "aila-oauth"
+path = "src/main.rs"
+
+[lib]
+name = "hid_oauth_lib"
+path = "src/lib.rs"
+
+[dev-dependencies]
+surf = "2.3.2"
+surf-vcr = "0.2.0"
+wiremock = "0.5"
+tempfile = "3.8"
+testcontainers = "0.20.0"
+testcontainers-modules = { version = "0.8.0", features = ["postgres"] }
+axum-test = "17"
+sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "migrate"] }
+tokio = { version = "1.45.0", features = ["full"] }
+reqwest = { version = "0.12", features = ["json"] }
