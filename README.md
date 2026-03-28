@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="img/orc-logo.png" alt="AILA OCR Logo" />
+  <img src="img/orc-logo.png" alt="AILA OCR Logo" width="400" />
 </p>
 
 # AILA-OAuth Gateway
