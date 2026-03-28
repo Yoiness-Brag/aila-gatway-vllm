@@ -7,8 +7,8 @@ use crate::management::{
     errors::ApiError,
 };
 
-const API_KEY_PREFIX: &str = "hid_live_";
-const API_SECRET_PREFIX: &str = "hid_secret_";
+const API_KEY_PREFIX: &str = "aila_live_";
+const API_SECRET_PREFIX: &str = "aila_secret_";
 const RANDOM_STRING_LENGTH: usize = 32;
 
 #[derive(Debug, Clone)]

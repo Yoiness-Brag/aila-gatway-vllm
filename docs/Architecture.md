@@ -1,8 +1,8 @@
-# Hid-OAuth Architecture
+# AILA-OAuth Architecture
 
 ## System Overview
 
-The Hid-OAuth Gateway is a high-performance LLM proxy written in Rust that provides unified access to multiple LLM providers with built-in OAuth client authentication, rate limiting, and usage tracking.
+The AILA-OAuth Gateway is a high-performance LLM proxy written in Rust that provides unified access to multiple LLM providers with built-in OAuth client authentication, rate limiting, and usage tracking.
 
 **Key Components:**
 - **Client Layer**: Applications that consume the LLM API using OAuth tokens
@@ -24,7 +24,7 @@ The OAuth authentication layer serves as a **critical security and governance bo
 
 #### 2. **Multi-Tenancy & Client Management**
 - **Problem**: Multiple applications need access to the same LLM providers
-- **Solution**: Each client gets unique OAuth credentials (`hid_live_xxx`) with individual:
+- **Solution**: Each client gets unique OAuth credentials (`aila_live_xxx`) with individual:
   - Rate limits (`rate_limit_per_minute`)
   - Allowed models (`allowed_models` JSONB array)
   - Token expiration (`token_expiration_hours`)
@@ -42,11 +42,11 @@ The OAuth authentication layer serves as a **critical security and governance bo
 Client Request → OAuth Validation → Model Routing → Provider Authentication → LLM Backend
      ↓                  ↓                  ↓                    ↓                  ↓
 Bearer Token    Hash Validation    Model Key Lookup    Provider API Key    Actual Model
-hid_live_xxx    (Database)         aila-ocr → model    HF Token           allenai/olmOCR
+aila_live_xxx    (Database)         aila-ocr → model    HF Token           allenai/olmOCR
 ```
 
 **Critical Distinction:**
-- **OAuth Token** (`hid_live_xxx`): Authenticates the **client application** to access the gateway
+- **OAuth Token** (`aila_live_xxx`): Authenticates the **client application** to access the gateway
 - **Provider API Key** (e.g., HuggingFace token): Authenticates the **gateway** to access the LLM provider
 - **Model Key** (`aila-ocr`): Routes request to correct model definition in pipeline
 - **Model Type** (`allenai/olmOCR-2-7B-1025-FP8`): Actual model name sent to provider
@@ -143,7 +143,7 @@ The request flow illustrates how an authenticated client request travels through
 **Text Request:**
 ```json
 POST http://localhost:3000/api/v1/chat/completions
-Authorization: Bearer hid_live_xxx
+Authorization: Bearer aila_live_xxx
 Content-Type: application/json
 
 {
@@ -159,7 +159,7 @@ Content-Type: application/json
 **Vision Request (Multi-Modal):**
 ```json
 POST http://localhost:3000/api/v1/chat/completions
-Authorization: Bearer hid_live_xxx
+Authorization: Bearer aila_live_xxx
 Content-Type: application/json
 
 {
@@ -203,7 +203,7 @@ Content-Type: application/json
 ### Key Architectural Insights
 
 **Two-Layer Authentication:**
-1. **Client → Gateway**: OAuth token (`hid_live_xxx`) validates client application
+1. **Client → Gateway**: OAuth token (`aila_live_xxx`) validates client application
 2. **Gateway → Provider**: Provider API key (e.g., HuggingFace token) authenticates gateway
 
 **Model Name Translation:**
@@ -247,7 +247,7 @@ sequenceDiagram
 The OAuth flow implements a secure client authentication system with configurable token expiration and automatic regeneration capability.
 
 **Security Features:**
-- **Token Format**: `hid_live_<32_random_chars>` - easily identifiable prefix
+- **Token Format**: `aila_live_<32_random_chars>` - easily identifiable prefix
 - **Configurable Expiration**: Token expiration is configurable via `token_expiration_hours` (default: 24h)
 - **Token Regeneration**: Clients can regenerate expired tokens via API
 - **Application ID**: Auto-generated unique identifier (`app_<16_chars>`) for each application
@@ -264,7 +264,7 @@ sequenceDiagram
     participant Gateway
 
     Admin->>ManagementAPI: POST /oauth-services
-    Note over ManagementAPI: Generate API Key (hid_live_xxx)
+    Note over ManagementAPI: Generate API Key (aila_live_xxx)
     Note over ManagementAPI: Hash API Key
     ManagementAPI->>Database: Store Client + Hash
     ManagementAPI-->>Admin: API Key (shown once)
@@ -465,7 +465,7 @@ graph TD
         BEDROCK[AWS Bedrock]
     end
 
-    GW[Hid-OAuth Gateway] --> OPENAI
+    GW[AILA-OAuth Gateway] --> OPENAI
     GW --> VLLM
     GW --> AILA
     GW --> ANTHROPIC
@@ -480,7 +480,7 @@ graph TD
 graph TB
     subgraph "Docker Compose"
         PG[PostgreSQL :5432]
-        GW[Hid-OAuth Gateway :3000/:8080]
+        GW[AILA-OAuth Gateway :3000/:8080]
     end
 
     subgraph "External Services"
@@ -496,7 +496,7 @@ graph TB
 
 ## Gateway API Service
 
-The Hid-OAuth Gateway provides an OpenAI-compatible REST API for LLM inference.
+The AILA-OAuth Gateway provides an OpenAI-compatible REST API for LLM inference.
 
 ### Core Endpoints (Port 3000)
 
@@ -527,7 +527,7 @@ The Hid-OAuth Gateway provides an OpenAI-compatible REST API for LLM inference.
 
 ### Authentication
 
-- Bearer token format: `hid_live_<random_string>`
+- Bearer token format: `aila_live_<random_string>`
 - Token expiration: Configurable via `token_expiration_hours` (default: 24h)
 - Regeneration: `POST /oauth-services/{id}/regenerate-token`
 
@@ -548,7 +548,7 @@ The Hid-OAuth Gateway provides an OpenAI-compatible REST API for LLM inference.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| HID_OAUTH_MODE | yaml or database | yaml |
+| AILA_OAUTH_MODE | yaml or database | yaml |
 | DATABASE_URL | PostgreSQL connection | - |
 | REQUIRE_AUTH | Enable OAuth | false |
 | PORT | Gateway port | 3000 |

@@ -1,12 +1,12 @@
 services:
-  hid-oauth-gateway:
+  aila-oauth-gateway:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: hid-oauth-gateway
+    container_name: aila-oauth-gateway
     env_file: .env
     environment:
-      HID_OAUTH_MODE: ${HID_OAUTH_MODE}
+      AILA_OAUTH_MODE: ${AILA_OAUTH_MODE}
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       REQUIRE_AUTH: ${REQUIRE_AUTH}
       RUST_LOG: ${RUST_LOG}
@@ -20,9 +20,9 @@ services:
     networks:
       - default
     external_links:
-      - hid-oauth-postgres:postgres
+      - aila-oauth-postgres:postgres
 
 networks:
   default:
-    name: api-getway-ocr-ci_hid-oauth-network
+    name: api-getway-ocr-ci_aila-oauth-network
     external: true

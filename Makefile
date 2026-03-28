@@ -1,7 +1,7 @@
 .PHONY: help postgres-up postgres-down migrate sqlx-prepare build-gateway up-gateway down-gateway logs clean-all
 
 help:
-	@echo "HID OAuth Gateway - Docker Compose Commands"
+	@echo "AILA OAuth Gateway - Docker Compose Commands"
 	@echo ""
 	@echo "Database Commands:"
 	@echo "  make postgres-up        - Start PostgreSQL"
@@ -60,11 +60,11 @@ sqlx-prepare:
 
 build-gateway:
 	@echo "Building gateway Docker image..."
-	docker compose -f docker-compose-hid-oauth.yml build hid-oauth-gateway
+	docker compose -f docker-compose-ailaoauth.yml build aila-oauth-gateway
 
 up-gateway:
 	@echo "Starting gateway service..."
-	docker compose -f docker-compose-hid-oauth.yml up -d hid-oauth-gateway
+	docker compose -f docker-compose-ailaoauth.yml up -d aila-oauth-gateway
 	@echo "Gateway running on:"
 	@echo "  LLM Gateway:    http://localhost:$(GATEWAY_PORT)"
 	@echo "  Management API: http://localhost:$(MANAGEMENT_PORT)"
@@ -72,7 +72,7 @@ up-gateway:
 
 down-gateway:
 	@echo "Stopping gateway service..."
-	docker compose -f docker-compose-hid-oauth.yml down
+	docker compose -f docker-compose-ailaoauth.yml down
 
 up: postgres-up migrate up-gateway
 	@echo ""
@@ -80,7 +80,7 @@ up: postgres-up migrate up-gateway
 
 down:
 	@echo "Stopping all services..."
-	docker compose -f docker-compose-hid-oauth.yml down
+	docker compose -f docker-compose-ailaoauth.yml down
 	docker compose down
 
 rebuild: down-gateway sqlx-prepare build-gateway up-gateway
@@ -94,7 +94,7 @@ clean-all:
 
 logs:
 	@echo "Viewing gateway logs..."
-	docker logs -f hid-oauth-gateway
+	docker logs -f aila-oauth-gateway
 
 create-oauth:
 	@echo "Creating OAuth service..."
@@ -125,7 +125,7 @@ test-auth:
 	@echo "Testing authenticated request..."
 	@if [ -z "$(TOKEN)" ]; then \
 		echo "Error: TOKEN is required"; \
-		echo "Example: make test-auth TOKEN='hid_live_xxx'"; \
+		echo "Example: make test-auth TOKEN='aila_live_xxx'"; \
 		exit 1; \
 	fi
 	curl -X POST http://localhost:$(GATEWAY_PORT)/api/v1/chat/completions \

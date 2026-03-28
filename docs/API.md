@@ -1,4 +1,4 @@
-# Hid-OAuth API Reference
+# AILA-OAuth API Reference
 
 ## Gateway API (Port 3000)
 
@@ -97,7 +97,7 @@ Headers:
 | Header | Required | Description |
 |--------|----------|-------------|
 | Content-Type | Yes | application/json |
-| Authorization | When REQUIRE_AUTH=true | Bearer hid_live_xxx |
+| Authorization | When REQUIRE_AUTH=true | Bearer aila_live_xxx |
 
 ### Text Completions
 
@@ -163,8 +163,8 @@ Response:
   "id": "550e8400-e29b-41d4-a716-446655440000",
   "application_service": "OCR-Invoice-Service",
   "application_id": "550e8400-e29b-41d4-a716-446655440001",
-  "api_key": "hid_live_aBcDeFgHiJkLmNoPqRsTuVwXyZ123456",
-  "api_secret": "hid_secret_aBcDeFgHiJkLmNoPqRsTuVwXyZ123456",
+  "api_key": "aila_live_aBcDeFgHiJkLmNoPqRsTuVwXyZ123456",
+  "api_secret": "aila_secret_aBcDeFgHiJkLmNoPqRsTuVwXyZ123456",
   "rate_limit_per_minute": 100,
   "allowed_models": ["aila-ocr", "gpt-4"],
   "token_expiration_hours": 24,
@@ -184,7 +184,7 @@ Response:
     "id": "550e8400-e29b-41d4-a716-446655440000",
     "application_service": "OCR-Invoice-Service",
     "application_id": "550e8400-e29b-41d4-a716-446655440001",
-    "api_key_masked": "hid_live_***",
+    "api_key_masked": "aila_live_***",
     "rate_limit_per_minute": 100,
     "allowed_models": ["aila-ocr"],
     "metadata": {},
@@ -231,7 +231,7 @@ Response: 204 No Content
 Response:
 ```json
 {
-  "new_api_key": "hid_live_newKeyHere123456789",
+  "new_api_key": "aila_live_newKeyHere123456789",
   "expires_at": "2025-07-01T00:00:00Z",
   "rotated_at": "2025-06-01T00:00:00Z"
 }
@@ -244,7 +244,7 @@ Response:
 Response:
 ```json
 {
-  "new_api_key": "hid_live_regeneratedKey123456",
+  "new_api_key": "aila_live_regeneratedKey123456",
   "expires_at": "2025-07-01T00:00:00Z",
   "regenerated_at": "2025-06-01T00:00:00Z"
 }

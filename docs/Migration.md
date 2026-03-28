@@ -50,7 +50,7 @@ docker compose up migrations
 cargo install sqlx-cli --no-default-features --features postgres
 
 # Set database URL
-export DATABASE_URL=postgresql://hid_oauth:hidoauthpassword@localhost:5432/hid_oauth
+export DATABASE_URL=postgresql://aila_oauth:ailaoauthpassword@localhost:5432/aila_oauth
 
 # Run migrations
 sqlx migrate run
@@ -108,7 +108,7 @@ docker compose up sqlx-prepare
 ### Step 5: Rebuild Gateway
 
 ```bash
-docker compose -f docker-compose-hid-oauth.yml build hid-oauth-gateway
+docker compose -f docker-compose-aila-oauth.yml build aila-oauth-gateway
 ```
 
 ## SQLx Offline Mode
@@ -135,7 +135,7 @@ Regenerate `.sqlx` cache when you:
 docker compose up sqlx-prepare
 
 # Or manually with sqlx-cli
-export DATABASE_URL=postgresql://hid_oauth:hidoauthpassword@localhost:5432/hid_oauth
+export DATABASE_URL=postgresql://aila_oauth:ailaoauthpassword@localhost:5432/aila_oauth
 cargo sqlx prepare
 ```
 
@@ -237,7 +237,7 @@ Cause: .sqlx cache files are outdated.
 Solution:
 ```bash
 docker compose up sqlx-prepare
-docker compose -f docker-compose-hid-oauth.yml build hid-oauth-gateway
+docker compose -f docker-compose-aila-oauth.yml build aila-oauth-gateway
 ```
 
 ### "relation already exists"
@@ -247,11 +247,11 @@ Cause: Migration partially applied or table exists.
 Solution:
 ```bash
 # Check migration status
-docker exec hid-oauth-postgres psql -U hid_oauth -d hid_oauth \
+docker exec aila-oauth-postgres psql -U aila_oauth -d aila_oauth \
   -c "SELECT * FROM _sqlx_migrations;"
 
 # If needed, drop and recreate (WARNING: destroys data)
-docker exec hid-oauth-postgres psql -U hid_oauth -d hid_oauth \
+docker exec aila-oauth-postgres psql -U aila_oauth -d aila_oauth \
   -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 docker compose up migrations
 ```
@@ -262,8 +262,8 @@ Cause: Database user lacks permissions.
 
 Solution:
 ```sql
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO hid_oauth;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO hid_oauth;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO aila_oauth;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO aila_oauth;
 ```
 
 ### Connection refused
@@ -276,7 +276,7 @@ Solution:
 docker compose ps
 
 # Verify connection
-docker exec hid-oauth-postgres psql -U hid_oauth -d hid_oauth -c "SELECT 1;"
+docker exec aila-oauth-postgres psql -U aila_oauth -d aila_oauth -c "SELECT 1;"
 ```
 
 ## Docker Files

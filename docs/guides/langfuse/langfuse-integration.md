@@ -125,7 +125,7 @@ curl -X POST http://localhost:8080/api/v1/management/pipelines \
 
 ### 1. Check Gateway Logs
 ```bash
-docker logs hid-oauth-gateway | grep "OpenTelemetry"
+docker logs aila-oauth-gateway | grep "OpenTelemetry"
 ```
 
 Expected output:
@@ -215,12 +215,12 @@ curl -X POST .../pipelines -d '{
 
 3. **Check network connectivity**
    ```bash
-   docker exec hid-oauth-gateway curl -I https://cloud.langfuse.com
+   docker exec aila-oauth-gateway curl -I https://cloud.langfuse.com
    ```
 
 4. **Review gateway logs**
    ```bash
-   docker logs hid-oauth-gateway 2>&1 | grep -i "opentelemetry\|langfuse\|trace"
+   docker logs aila-oauth-gateway 2>&1 | grep -i "opentelemetry\|langfuse\|trace"
    ```
 
 ### Authentication Errors

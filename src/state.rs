@@ -9,7 +9,7 @@ use std::sync::{Arc, RwLock};
 use tower::ServiceExt;
 use tracing::{debug, warn};
 
-const PIPELINE_HEADER: &str = "x-hid-oauth-pipeline";
+const PIPELINE_HEADER: &str = "x-aila-oauth-pipeline";
 
 const DEFAULT_PIPELINE_NAME: &str = "default";
 

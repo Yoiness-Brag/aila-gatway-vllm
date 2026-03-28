@@ -1,6 +1,6 @@
 # vLLM OCR Model Setup Guide
 
-This guide explains how to configure the AILA OCR model (powered by vLLM) with the Hid-OAuth Gateway.
+This guide explains how to configure the AILA OCR model (powered by vLLM) with the AILA-OAuth Gateway.
 
 ## Architecture
 
@@ -10,7 +10,7 @@ graph TB
         C[Client Application]
     end
 
-    subgraph "Hid-OAuth Gateway"
+    subgraph "AILA-OAuth Gateway"
         AUTH[Auth Middleware]
         GW[Gateway :3000]
         MGMT[Management API :8080]
@@ -74,7 +74,7 @@ The AILA OCR model uses **vLLM inference** which is **OpenAI API compatible**. T
 
 ## Prerequisites
 
-1. Hid-OAuth running in **Database Mode** (`HID_OAUTH_MODE=database`)
+1. AILA-OAuth running in **Database Mode** (`AILA_OAUTH_MODE=database`)
 2. PostgreSQL database configured
 3. Management API accessible on port 8080
 
@@ -166,7 +166,7 @@ If OAuth is enabled (`REQUIRE_AUTH=true`), include the Bearer token:
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/chat/completions \
-  -H "Authorization: Bearer hid_live_your_api_key_here" \
+  -H "Authorization: Bearer aila_live_your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
     "model": "aila-ocr",
@@ -191,7 +191,7 @@ flowchart TD
         REQ["Client Request<br/>model: aila-ocr"]
     end
 
-    subgraph Gateway["Hid-OAuth Gateway :3000"]
+    subgraph Gateway["AILA-OAuth Gateway :3000"]
         AUTH["1. Auth Middleware<br/>(if REQUIRE_AUTH=true)"]
         PIPE["2. Pipeline Router<br/>default pipeline"]
         MODEL["3. Model Router<br/>aila-ocr model"]
@@ -215,7 +215,7 @@ flowchart TD
 sequenceDiagram
     participant Client
     participant Auth as Auth Middleware
-    participant Gateway as Hid-OAuth Gateway
+    participant Gateway as AILA-OAuth Gateway
     participant vLLM as vLLM Server
 
     Client->>+Auth: POST /api/v1/chat/completions
@@ -236,7 +236,7 @@ sequenceDiagram
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `HID_OAUTH_MODE` | Must be `database` for API registration | `yaml` |
+| `AILA_OAUTH_MODE` | Must be `database` for API registration | `yaml` |
 | `DATABASE_URL` | PostgreSQL connection string | Required |
 | `REQUIRE_AUTH` | Enable OAuth authentication | `false` |
 | `RUST_LOG` | Logging level | `warn` |

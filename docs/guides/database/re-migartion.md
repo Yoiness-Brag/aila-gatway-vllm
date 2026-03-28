@@ -1,18 +1,18 @@
-# HID OAuth Gateway - Docker and Migration Guide
+# AILA OAuth Gateway - Docker and Migration Guide
 
 ## Docker Compose Files
 
 | File | Purpose |
 |------|---------|
 | `docker-compose.yml` | PostgreSQL + Migrations + sqlx-prepare |
-| `docker-compose-hid-oauth.yml` | Gateway service |
+| `docker-compose-aila-oauth.yml` | Gateway service |
 
 ## Quick Start
 
 ```bash
 docker compose up -d postgres
 docker compose up migrations
-docker compose -f docker-compose-hid-oauth.yml up -d
+docker compose -f docker-compose-aila-oauth.yml up -d
 ```
 
 ## Migration Files
@@ -42,7 +42,7 @@ docker compose up migrations
 docker compose up sqlx-prepare
 
 # 5. Rebuild gateway
-docker compose -f docker-compose-hid-oauth.yml build
+docker compose -f docker-compose-aila-oauth.yml build
 ```
 
 ## SQLx Cache
@@ -94,12 +94,12 @@ docker compose up sqlx-prepare
 **Build fails with "no cached data":**
 ```bash
 docker compose up sqlx-prepare
-docker compose -f docker-compose-hid-oauth.yml build
+docker compose -f docker-compose-aila-oauth.yml build
 ```
 
 **Migration fails with "relation already exists":**
 ```bash
-docker exec hid-oauth-postgres psql -U hid_oauth -d hid_oauth \
+docker exec aila-oauth-postgres psql -U aila_oauth -d aila_oauth \
   -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 docker compose up migrations
 ```

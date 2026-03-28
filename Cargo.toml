@@ -67,7 +67,7 @@ name = "aila-oauth"
 path = "src/main.rs"
 
 [lib]
-name = "hid_oauth_lib"
+name = "aila_oauth_lib"
 path = "src/lib.rs"
 
 [dev-dependencies]

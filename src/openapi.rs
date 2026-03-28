@@ -219,9 +219,9 @@ pub async fn embeddings_handler() {}
         (name = "Pipelines", description = "Pipeline configuration management"),
     ),
     info(
-        title = "Hid-OAuth Gateway API",
+        title = "AILA-OAuth Gateway API",
         version = "1.0.0",
-        description = "HID OAuth Gateway API documentation.\n\n**LLM Gateway (Port 3000)**: Proxies requests to LLM providers. Requires Bearer token.\n\n**Management API (Port 8080)**: Admin operations for providers, models, pipelines, OAuth services.",
+        description = "AILA OAuth Gateway API documentation.\n\n**LLM Gateway (Port 3000)**: Proxies requests to LLM providers. Requires Bearer token.\n\n**Management API (Port 8080)**: Admin operations for providers, models, pipelines, OAuth services.",
         contact(
             name = "AILA AI",
             url = "https://aila.ma",
@@ -237,8 +237,8 @@ pub async fn embeddings_handler() {}
         (url = "http://localhost:8080", description = "Management API")
     )
 )]
-pub struct HidOAuthApiDoc;
+pub struct AilaOAuthApiDoc;
 
 pub fn get_openapi_spec() -> utoipa::openapi::OpenApi {
-    HidOAuthApiDoc::openapi()
+    AilaOAuthApiDoc::openapi()
 }

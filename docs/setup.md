@@ -1,7 +1,7 @@
 ## Project Structure
 
 ```
-hid-oauth/
+aila-oauth/
 ├── src/                        # Main application code
 │   ├── main.rs                 # Application entry point
 │   ├── lib.rs                  # Library exports
@@ -78,7 +78,7 @@ Ideal for production environments requiring dynamic configuration.
 3. Set environment variables:
 
    ```bash
-   HID_OAUTH_MODE=database
+   AILA_OAUTH_MODE=database
    DATABASE_URL=postgresql://user:pass@host:5432/db
    ```
 
@@ -199,7 +199,7 @@ See [docs/VLLM_OCR_SETUP.md](docs/VLLM_OCR_SETUP.md) for detailed vLLM setup ins
 
 ## OAuth Client Authentication
 
-Hid-OAuth supports OAuth client authentication for incoming requests (Database Mode only).
+AILA-OAuth supports OAuth client authentication for incoming requests (Database Mode only).
 
 ### Features
 
@@ -220,7 +220,7 @@ curl -X POST http://localhost:8080/api/v1/management/oauth-services \
 
 # Use returned API key for gateway requests
 curl -X POST http://localhost:3000/api/v1/chat/completions \
-  -H "Authorization: Bearer hid_live_xxx" \
+  -H "Authorization: Bearer aila_live_xxx" \
   -H "Content-Type: application/json" \
   -d '{"model": "gpt-4", "messages": [{"role": "user", "content": "Hello"}]}'
 
@@ -236,10 +236,10 @@ See [docs/OAUTH_IMPLEMENTATION.md](docs/OAUTH_IMPLEMENTATION.md) for full docume
 
 ```bash
 # YAML Mode
-helm install hid-oauth ./helm
+helm install aila-oauth ./helm
 
 # Database Mode
-helm install hid-oauth ./helm \
+helm install aila-oauth ./helm \
   --set management.enabled=true \
   --set management.database.host=postgres \
   --set management.database.existingSecret=postgres-secret
@@ -253,14 +253,14 @@ helm install hid-oauth ./helm \
 version: '3.8'
 services:
   # Database Mode with OAuth
-  hid-oauth-gateway:
-    image: ocp-registry.aila.cloud/youness_elbrag/hid-oauth
+  aila-oauth-gateway:
+    image: ocp-registry.aila.cloud/youness_elbrag/aila-oauth
     ports:
       - "3000:3000"
       - "8080:8080"
     environment:
-      - HID_OAUTH_MODE=database
-      - DATABASE_URL=postgresql://hid_oauth:password@postgres:5432/hid_oauth
+      - AILA_OAUTH_MODE=database
+      - DATABASE_URL=postgresql://aila_oauth:password@postgres:5432/aila_oauth
       - REQUIRE_AUTH=true
     depends_on:
       - postgres
@@ -268,8 +268,8 @@ services:
   postgres:
     image: postgres:15
     environment:
-      - POSTGRES_DB=hid_oauth
-      - POSTGRES_USER=hid_oauth
+      - POSTGRES_DB=aila_oauth
+      - POSTGRES_USER=aila_oauth
       - POSTGRES_PASSWORD=password
 ```
 
@@ -277,7 +277,7 @@ services:
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| `HID_OAUTH_MODE` | Deployment mode: `yaml` or `database` | `yaml` | No |
+| `AILA_OAUTH_MODE` | Deployment mode: `yaml` or `database` | `yaml` | No |
 | `CONFIG_FILE_PATH` | Path to YAML config file | `config.yaml` | YAML mode |
 | `DATABASE_URL` | PostgreSQL connection string | - | Database mode |
 | `DB_POLL_INTERVAL_SECONDS` | Config polling interval | `30` | No |
@@ -313,7 +313,7 @@ cargo clippy
 cargo run
 
 # Run database mode
-HID_OAUTH_MODE=database DATABASE_URL=postgresql://... cargo run
+AILA_OAUTH_MODE=database DATABASE_URL=postgresql://... cargo run
 ```
 
 ### Database Setup (for Database Mode)
@@ -387,7 +387,7 @@ graph TB
         C[Client Application]
     end
 
-    subgraph "Hid-OAuth Gateway"
+    subgraph "AILA-OAuth Gateway"
         AUTH[Auth Middleware]
         GW[Gateway :3000]
         MGMT[Management API :8080]
@@ -444,4 +444,4 @@ docker-compose up -d
 Services:
 - **postgres**: PostgreSQL database (port 5432)
 - **migrations**: Runs database migrations automatically
-- **hid-oauth-gateway**: Gateway with OAuth authentication (ports 3000, 8080)
+- **aila-oauth-gateway**: Gateway with OAuth authentication (ports 3000, 8080)

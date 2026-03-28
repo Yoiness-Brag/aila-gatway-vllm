@@ -16,7 +16,7 @@ use sqlx::PgPool;
 pub fn create_router(state: Arc<AppState>) -> Router {
     let (prometheus_layer, metric_handle) = PrometheusMetricLayerBuilder::new()
         .with_ignore_patterns(&["/metrics", "/health"])
-        .with_prefix("hid_oauth")
+        .with_prefix("aila_oauth")
         .with_default_metrics()
         .build_pair();
 
@@ -103,7 +103,7 @@ pub fn create_router_with_auth(state: Arc<AppState>, pool: PgPool) -> Router {
 
     let (prometheus_layer, metric_handle) = PrometheusMetricLayerBuilder::new()
         .with_ignore_patterns(&["/metrics", "/health"])
-        .with_prefix("hid_oauth")
+        .with_prefix("aila_oauth")
         .with_default_metrics()
         .build_pair();
 

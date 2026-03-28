@@ -1,4 +1,4 @@
-# Hid-OAuth Docker Compose Example
+# AILA-OAuth Docker Compose Example
 
 ## Quick Start
 
@@ -9,8 +9,8 @@ docker compose up -d
 
 ## Services
 
-- **hid-oauth-gateway**: LLM Gateway with OAuth (ports 3000, 8080)
-- **hid-oauth-migrations**: Database migrations
+- **aila-oauth-gateway**: LLM Gateway with OAuth (ports 3000, 8080)
+- **aila-oauth-migrations**: Database migrations
 - **postgres**: PostgreSQL database (port 5432)
 
 ## Commands
@@ -18,7 +18,7 @@ docker compose up -d
 ```bash
 docker compose up -d
 docker compose down
-docker compose logs -f hid-oauth-gateway
+docker compose logs -f aila-oauth-gateway
 ```
 
 ## Test

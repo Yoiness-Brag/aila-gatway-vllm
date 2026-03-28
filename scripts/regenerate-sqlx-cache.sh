@@ -9,7 +9,7 @@ echo "=== Regenerating SQLX Offline Cache ==="
 # Check if DATABASE_URL is set
 if [ -z "$DATABASE_URL" ]; then
     echo "Error: DATABASE_URL environment variable is not set"
-    echo "Example: export DATABASE_URL=postgresql://hid_oauth:hidoauthpassword@localhost:5432/hid_oauth"
+    echo "Example: export DATABASE_URL=postgresql://aila_oauth:ailaoauthpassword@localhost:5432/aila_oauth"
     exit 1
 fi
 

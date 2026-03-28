@@ -1,10 +1,10 @@
 use dotenvy::dotenv;
-use hid_oauth_lib::types::GatewayConfig;
-use hid_oauth_lib::{config, routes, state::AppState};
+use aila_oauth_lib::types::GatewayConfig;
+use aila_oauth_lib::{config, routes, state::AppState};
 use std::sync::Arc;
 use tower_http::trace::{DefaultMakeSpan, TraceLayer};
 use tracing::{Level, debug, error, info};
-use {hid_oauth_lib::management::db_based_config_integration, sqlx::PgPool, std::time::Duration};
+use {aila_oauth_lib::management::db_based_config_integration, sqlx::PgPool, std::time::Duration};
 
 #[allow(dead_code)]
 const DEFAULT_CONFIG_PATH: &str = "config.yaml";
@@ -22,12 +22,12 @@ pub enum ConfigMode {
 }
 
 type ConfigProvider =
-    Arc<hid_oauth_lib::management::services::config_provider_service::ConfigProviderService>;
+    Arc<aila_oauth_lib::management::services::config_provider_service::ConfigProviderService>;
 
 async fn determine_config_mode() -> anyhow::Result<ConfigMode> {
-    match std::env::var("HID_OAUTH_MODE").as_deref() {
+    match std::env::var("AILA_OAUTH_MODE").as_deref() {
         Ok("database") => {
-            debug!("HID_OAUTH_MODE=database detected. Initializing database mode.");
+            debug!("AILA_OAUTH_MODE=database detected. Initializing database mode.");
             let database_url = std::env::var("DATABASE_URL")
                 .map_err(|e| anyhow::anyhow!("DATABASE_URL not set for database mode: {e}"))?;
 
@@ -41,20 +41,20 @@ async fn determine_config_mode() -> anyhow::Result<ConfigMode> {
             Ok(ConfigMode::Database { pool })
         }
         Ok("yaml") => {
-            debug!("HID_OAUTH_MODE=yaml detected. Using YAML configuration mode.");
+            debug!("AILA_OAUTH_MODE=yaml detected. Using YAML configuration mode.");
             let config_path = std::env::var("CONFIG_FILE_PATH")
                 .unwrap_or_else(|_| DEFAULT_CONFIG_PATH.to_string());
             Ok(ConfigMode::Yaml { path: config_path })
         }
         Ok(invalid_mode) => {
             error!(
-                "Invalid HID_OAUTH_MODE '{}'. Valid options: 'yaml', 'database'",
+                "Invalid AILA_OAUTH_MODE '{}'. Valid options: 'yaml', 'database'",
                 invalid_mode
             );
-            Err(anyhow::anyhow!("Invalid HID_OAUTH_MODE: {invalid_mode}"))
+            Err(anyhow::anyhow!("Invalid AILA_OAUTH_MODE: {invalid_mode}"))
         }
         Err(_) => {
-            debug!("HID_OAUTH_MODE not set. Defaulting to YAML configuration mode.");
+            debug!("AILA_OAUTH_MODE not set. Defaulting to YAML configuration mode.");
             let config_path = std::env::var("CONFIG_FILE_PATH")
                 .unwrap_or_else(|_| DEFAULT_CONFIG_PATH.to_string());
             Ok(ConfigMode::Yaml { path: config_path })
@@ -142,7 +142,7 @@ async fn main() -> anyhow::Result<()> {
 
     tracing_subscriber::fmt().with_max_level(log_level).init();
 
-    info!("Starting Hid-OAuth Gateway...");
+    info!("Starting AILA-OAuth Gateway...");
 
     let config_mode = determine_config_mode().await?;
     info!("Configuration mode determined: {:?}", config_mode);

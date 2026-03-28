@@ -8,18 +8,18 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-DB_NAME="hid_oauth"
-DB_USER="hid_oauth"
-DB_PASSWORD="hidoauthpassword"
+DB_NAME="aila_oauth"
+DB_USER="aila_oauth"
+DB_PASSWORD="ailaoauthpassword"
 DB_PORT="5432"
-CONTAINER_NAME="hid-oauth-postgres"
+CONTAINER_NAME="aila-oauth-postgres"
 GATEWAY_PORT="3000"
 MANAGEMENT_PORT="8080"
 GATEWAY_URL="http://localhost:${GATEWAY_PORT}"
 MANAGEMENT_URL="http://localhost:${MANAGEMENT_PORT}"
 API_BASE="${MANAGEMENT_URL}/api/v1/management"
 
-echo -e "${BLUE}Hid-OAuth Gateway - Database Mode Setup${NC}"
+echo -e "${BLUE}AILA-OAuth Gateway - Database Mode Setup${NC}"
 echo "=================================================="
 
 if ! command -v docker &> /dev/null; then
@@ -73,7 +73,7 @@ echo -e "${BLUE}3. Creating .env file...${NC}"
 
 cat > .env << EOF
 DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}
-HID_OAUTH_MODE=database
+AILA_OAUTH_MODE=database
 REQUIRE_AUTH=true
 RUST_LOG=info
 PORT=${GATEWAY_PORT}
@@ -96,7 +96,7 @@ echo -e "${GREEN}Setup completed successfully!${NC}"
 echo ""
 echo -e "${YELLOW}Next steps:${NC}"
 echo "1. Start the gateway:"
-echo -e "   ${BLUE}HID_OAUTH_MODE=database cargo run${NC}"
+echo -e "   ${BLUE}AILA_OAUTH_MODE=database cargo run${NC}"
 echo ""
 echo "2. Or use docker-compose:"
 echo -e "   ${BLUE}docker-compose up -d${NC}"

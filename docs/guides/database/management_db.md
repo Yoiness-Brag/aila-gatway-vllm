@@ -1,13 +1,13 @@
 # Management API - Database Mode
 
-Configure providers, models, and pipelines via REST API when running in Database Mode (`HID_OAUTH_MODE=database`).
+Configure providers, models, and pipelines via REST API when running in Database Mode (`AILA_OAUTH_MODE=database`).
 
 Configuration is stored in PostgreSQL and managed via API on port 8080. Changes are automatically picked up without restart (polling interval: 30s).
 
 ## Prerequisites
 
 1. PostgreSQL database running
-2. `HID_OAUTH_MODE=database` environment variable set
+2. `AILA_OAUTH_MODE=database` environment variable set
 3. `DATABASE_URL` configured
 4. Migrations applied (`sqlx migrate run`)
 

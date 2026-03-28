@@ -2,6 +2,8 @@
   <img src="img/orc-logo.png" alt="AILA OCR Logo" width="400" />
 </p>
 
+High-performance Rust gateway for unified access to LLM providers (vLLM, OpenAI, Anthropic, Azure, Bedrock, Vertex AI). Supports OAuth auth, multi-tenancy, rate limiting, and usage tracking. Kubernetes-ready with zero-downtime config, OpenAI-compatible API, multimodal support, routing with fallback, and OpenTelemetry tracing.
+
 # AILA-OAuth Gateway
 LLM gateway written in Rust with OAuth authentication, multi-provider support, and dynamic configuration.
 
@@ -96,7 +98,7 @@ result = llm_structured.invoke([{
 ```java
 OpenAIClient client = OpenAIOkHttpClient.builder()
     .baseUrl("http://localhost:3000/api/v1")
-    .apiKey("hid_live_xxx")
+    .apiKey("aila_live_xxx")
     .build();
 
 byte[] imageBytes = Files.readAllBytes(Paths.get("id.jpg"));
